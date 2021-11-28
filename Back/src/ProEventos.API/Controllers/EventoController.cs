@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ProEventos.API.Data;
 using ProEventos.API.Models;
 
 namespace ProEventos.API.Controllers
@@ -12,64 +13,52 @@ namespace ProEventos.API.Controllers
     [Route("api/[controller]")]
     public class EventoController : ControllerBase
     {
-       
+        private readonly DataContext context;
 
-        public EventoController(ILogger<EventoController> logger)
+        public EventoController(DataContext context)
         {
-            
+            this.context = context;
+
         }
+
+
+    
 
         [HttpGet]
         public IEnumerable<Evento> Get()
         {
-            return new Evento[]{
-                new Evento(){
-                EventoId = 1,
-                Tema = "Angular",
-                Local = "São Paulo",
-                Lote = "Lote 1",
-                QtPessoas = 12,
-                DataEvento = "01/01/2020",
-                ImagemURL = "http://www.google.com.br"
-                }, 
-                new Evento(){
-                EventoId = 2,
-                Tema = "Angular",
-                Local = "São Paulo",
-                Lote = "Lote 1",
-                QtPessoas = 12,
-                DataEvento = "01/01/2020",
-                ImagemURL = "http://www.google.com.br"
-                }
-            };
-            
-          } 
-         
-            
-      
+           return this.context.Eventos;
+
+        }
+
+        [HttpGet("{id}")]
+        public Evento GetById(int id)
+        {
+            return this.context.Eventos.FirstOrDefault(evento => evento.EventoId == id);
+        }
+
         [HttpPost]
         public string Post()
         {
             return "Exemplo de Post";
-            
+
         }
 
-        
+
 
         [HttpPut("{id}")]
         public string Put(int id)
         {
             return $"Exemplo de Put {id}";
-            
+
         }
         [HttpDelete("{id}")]
         public string delete(int id)
         {
             return $"Exemplo de delete {id}";
-            
+
         }
     }
 }
 
 
- 
